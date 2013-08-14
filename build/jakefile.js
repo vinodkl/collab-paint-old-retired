@@ -1,6 +1,4 @@
-desc('default');
-
-task('default', ["lint"]);
+desc('Lint everything');
 
 task('lint', [], function() {
 	var lint = require("./lint_runner.js");
@@ -12,6 +10,13 @@ task('lint', [], function() {
 	var options = {
 		node: true
 	};
-	
 	lint.validateFileList(files.toArray(), options, {});
+});
+
+desc('Build and Test everything');
+task('default', ["lint"]);
+
+desc('Integration block');
+task('integration', ["default"], function() {
+	console.log('integration block');
 });
