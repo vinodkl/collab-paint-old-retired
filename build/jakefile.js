@@ -10,7 +10,10 @@ task('lint', [], function() {
 	var options = {
 		node: true
 	};
-	lint.validateFileList(files.toArray(), options, {}) || fail('lint failed');
+	var lintResult = lint.validateFileList(files.toArray(), options, {});
+	if(!lintResult) {
+		fail('lint failed');
+	}
 });
 
 desc('Build and Test everything');
