@@ -14,6 +14,7 @@ task('lint', [], function() {
 	if(!lintResult) {
 		fail('lint failed');
 	}
+	console.log(">>>JS lint completed<<<");
 });
 
 desc('Build and Test everything');
@@ -22,8 +23,11 @@ task('default', ["lint", "test"]);
 desc('test evrything');
 task('test', [], function() {
 	var reporter = require('nodeunit').reporters['default'];
-	reporter.run(['../test']);
-});
+	reporter.run(['../test'], null, function(failures) {
+		console.log('>>>unit tests completed<<<');
+		complete();
+	});
+}, {async : true});
 
 desc('Integration block');
 task('integration', ["default"], function() {
