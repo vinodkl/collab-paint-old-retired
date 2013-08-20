@@ -17,7 +17,13 @@ task('lint', [], function() {
 });
 
 desc('Build and Test everything');
-task('default', ["lint"]);
+task('default', ["lint", "test"]);
+
+desc('test evrything');
+task('test', [], function() {
+	var reporter = require('nodeunit').reporters['default'];
+	reporter.run(['../test']);
+});
 
 desc('Integration block');
 task('integration', ["default"], function() {
