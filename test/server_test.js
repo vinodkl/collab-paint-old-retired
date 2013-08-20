@@ -1,4 +1,6 @@
+var server = require("../server.js");
+
 exports.testNothing = function(test) {
-	test.ok(true, "hello");
+	test.ok(server.number, 3);
 	test.done();
 }
