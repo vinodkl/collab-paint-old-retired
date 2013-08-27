@@ -1,6 +1,30 @@
 desc('Lint everything');
 
-task('lint', [], function() {
+task('node', [], function() {
+	var command = "node --version",
+		requiredVersion = "v0.8.4\n",
+		stdout = '';
+
+	console.log('> '+ command);
+
+	var process = jake.createExec(command, {printStdout: true, printStderr:true});
+
+	process.on('stdout', function(chunk) {
+		stdout += chunk;
+	});
+
+	process.on('cmdEnd', function() {
+		console.log(stdout);
+		if(stdout != requiredVersion) {
+			fail('please use node version : '+ requiredVersion);
+		}
+		complete();
+	});
+
+	process.run();
+}, {async: true});
+
+task('lint', ["node"], function() {
 	var lint = require("./lint_runner.js");
 	
 	var files = new jake.FileList();
@@ -18,7 +42,7 @@ task('lint', [], function() {
 });
 
 desc('Build and Test everything');
-task('test', [], function() {
+task('test', ["node"], function() {
 	var reporter = require('nodeunit').reporters['default'];
 	reporter.run(['../test'], null, function(failures) {
 		console.log('>>>unit tests completed<<<');

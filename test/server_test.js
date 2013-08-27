@@ -4,6 +4,7 @@ var http = require('http');
 var PORT = "8081";
 
 exports.tearDown = function(done) {
+	
 	server.stop(function() {
 		done();
 	});
@@ -15,6 +16,13 @@ exports.testHTTPServer = function(test) {
 		test.done();
 	});
 };
+
+// exports.test_serverStartRequiresPortnumber = function(test) {
+// 	test.throws(function(){
+// 		server.start();
+// 	});
+// 	test.done();
+// };
 
 exports.test_serverReturnsData = function(test) {
 	server.start(PORT);

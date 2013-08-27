@@ -5,6 +5,8 @@ var server = http.createServer();
 
 exports.start = function(portNumber) {	
 	
+	if(!portNumber) throw 'port number required to start server';
+	
 	server.on('request', function(req, res) {
 		var body = "<html><head><title></title></head>" +
 					"<body><p>Node server running</p></body></html>";
