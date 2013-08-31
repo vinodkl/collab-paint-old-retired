@@ -1,16 +1,24 @@
 "use strict";
 
 var http = require('http');
+var fs = require('fs');
 var server = http.createServer();
 
-exports.start = function(portNumber) {	
+exports.start = function(fileToServer, portNumber) {	
 	
 	if(!portNumber) throw 'port number required to start server';
 	
 	server.on('request', function(req, res) {
-		var body = "<html><head><title></title></head>" +
-					"<body><p>Node server running</p></body></html>";
-		res.end(body);
+		if(req.url === "/" || req.url === "/index.html") {
+			fs.readFile(fileToServer, function(err, data) {
+				if(err) throw err;
+				res.end(data);
+			});
+		} else {
+			res.statusCode = 404;
+			res.end('Page not found');
+
+		}
 	});
 
 	server.listen(portNumber);
