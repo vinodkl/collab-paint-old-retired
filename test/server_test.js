@@ -3,7 +3,7 @@ var http = require('http');
 var fs = require('fs');
 var assert = require('assert');
 
-var TEST_FILE = "test.html";
+var TEST_FILE = "./test.html";
 
 var PORT = "8081";
 
@@ -46,3 +46,36 @@ exports.tearDown = function(done) {
 		
 // 	});
 // }
+
+function httpGET(url, callback) {
+	server.start(TEST_FILE, 8081);
+	var req = http.get(url);
+
+	req.on('response', function(res) {
+		var recieveData = "";
+		res.setEncoding('utf-8');
+
+		res.on('data', function(chunk) {
+			recieveData += chunk;
+		});
+
+		res.on('end', function(){
+			server.stop(function() {
+				callback(res, recieveData);
+			});
+		});
+
+	});
+}
+
+exports.test_serverServesFromGivenFile = function(test) {
+	var testData = "this is a test data";
+
+	fs.writeFileSync(TEST_FILE, testData);
+	httpGET('http://localhost:8081/index.html', function(res, resData){
+		test.equals(200, res.statusCode, "status not 200");
+		test.equals(testData, resData, "response not same as in file");
+		test.done();
+	});
+
+};
