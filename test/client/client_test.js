@@ -1,7 +1,7 @@
-var assert = chai.assert;
+// var assert = chai.assert;
 
 describe("nothing", function(){
 	it('should run', function() {
-		assert.equal("foo", "foo");
+		expect("foo").to.equal("foo");
 	});
 });

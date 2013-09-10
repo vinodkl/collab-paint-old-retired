@@ -1,3 +1,5 @@
+/*jshint regexp:false*/
+
 "use strict";
 
 var http = require('http');
@@ -9,13 +11,13 @@ var TEST_FILE = "./test.html";
 var TEST_404_FILE = "./test_404.html";
 
 var PORT = "5000";
-var process;
+var child;
 
 exports.tearDown = function(done) {
-	process.on("exit", function(code, signal) {
+	child.on("exit", function(code, signal) {
 		done();
 	});
-	process.kill();
+	child.kill();
 };
 
 function httpGet(url, callback) {
@@ -40,18 +42,18 @@ function httpGet(url, callback) {
 function runServer(nodeArgs) {
 	var commandLine = parseProcFile();
 
-	// process = child_process.spawn("node", nodeArgs);
-	process = child_process.spawn(commandLine.command, commandLine.options);
-	process.stdout.on("data", function(chunk) {
+	// child = child_process.spawn("node", nodeArgs);
+	child = child_process.spawn(commandLine.command, commandLine.options);
+	child.stdout.on("data", function(chunk) {
 		console.log('server stdout ' + chunk);
 	});
 
-	process.stderr.on("data", function(chunk) {
+	child.stderr.on("data", function(chunk) {
 		console.log('server stderr ' + chunk);
 	});
 
-	process.on('exit' , function(code, signal) {
-		console.log('server process exited with ' + code + ' and signal ' + signal);
+	child.on('exit' , function(code, signal) {
+		console.log('server child exited with ' + code + ' and signal ' + signal);
 	});	
 }
 
@@ -74,4 +76,4 @@ exports.test_for_smoke = function(test) {
 			test.done();
 		});
 	}, 1000);
-}
+};
