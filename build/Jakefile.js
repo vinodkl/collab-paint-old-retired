@@ -28,8 +28,8 @@ task('lint', ["node"], function() {
 	var lint = require("./lint_runner.js");
 	
 	var files = new jake.FileList();
-	files.include("**/*.js");
-	files.exclude("build");
+	files.include("../**/*.js");
+	files.exclude("../node_modules");
 	
 	var options = {
 		node: true
@@ -42,13 +42,23 @@ task('lint', ["node"], function() {
 });
 
 desc('Build and Test everything');
-task('test', ["node"], function() {
+task('test', ["testServer", "testClient"]);
+
+task("testClient", function() {
+	sh("./karma.sh run", "Client tests failed", function(stdout) {
+		console.log(stdout);
+		complete();
+	});
+}, {async : true});
+
+task('testServer', ["node"], function() {
 	var reporter = require('nodeunit').reporters['default'];
 	reporter.run(['../test'], null, function(failures) {
 		console.log('>>>unit tests completed<<<');
 		complete();
 	});
 }, {async : true});
+
 
 task('default', ["lint", "test"]);
 
@@ -66,3 +76,23 @@ task('integration', ["default"], function() {
 	console.log('4. git merge master --no-ff --log');
 	console.log('5. git checkout master switch back to master');
 });
+
+
+
+function sh(command, errorMessage, callback) {
+	console.log("> " + command);
+
+	var stdout = "";
+	var process = jake.createExec(command, {printStdout:true, printStderr: true});
+	process.on("stdout", function(chunk) {
+		stdout += chunk;
+	});
+	process.on("error", function() {
+		fail(errorMessage);
+	});
+	process.on("cmdEnd", function() {
+		callback(stdout);
+	});
+	process.run();
+
+}
