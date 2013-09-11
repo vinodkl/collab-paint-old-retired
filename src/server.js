@@ -25,7 +25,7 @@ exports.start = function(indexFile, fileNotFoundPage, portNumber, callback) {
 			serveFile(res, VENDOR_JS_PATH + match[1]);
 		} else if(match1) {
 			res.statusCode = 200;
-			serveFile(res, match[1] + "js");
+			serveFile(res, match1[1] + "js");
 		} else {
 			res.statusCode = 404;
 			serveFile(res, fileNotFoundPage);
