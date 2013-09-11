@@ -30,6 +30,7 @@ task('lint', ["node"], function() {
 	var files = new jake.FileList();
 	files.include("../**/*.js");
 	files.exclude("../node_modules");
+	files.exclude("../src/vendor_lib");
 	
 	var options = {
 		node: true

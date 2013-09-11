@@ -15,7 +15,10 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
 	"../node_modules/expect.js/expect.js",
-	"../test/client/*_test.js"
+	"../test/client/*_test.js",
+    "../src/vendor_lib/jquery-1.10.2.min.js",
+    "../src/vendor_lib/raphael-min.js",
+    "../src/client.js"
     ],
 
 
